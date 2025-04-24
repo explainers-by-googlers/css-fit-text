@@ -101,7 +101,7 @@ A long headline containing several words or a very long word might easily overfl
 
 
 ### Combining behaviors 
-Using both text-grow and text-shrink creates fluid headlines that always attempt to occupy 100% of their container width, adapting automatically whether the container gets wider or narrower. Creates responsive layouts where text scales naturally with the design.
+Using both expanding and shrinking creates fluid headlines that always attempt to occupy 100% of their container width, adapting automatically whether the container gets wider or narrower. Creates responsive layouts where text scales naturally with the design.
 
 * Original:
     ```html
@@ -130,7 +130,7 @@ Using both text-grow and text-shrink creates fluid headlines that always attempt
 
 
 ### Fitting Captions and Pull Quotes
-Text accompanying images or used as pull quotes often needs to precisely fit the width of the related content block. text-shrink can prevent overflow, while text-grow can be used to ensure short captions don't look awkward in wide containers.
+Text accompanying images or used as pull quotes often needs to precisely fit the width of the related content block. 'Shrinking' can prevent overflow, while 'Expanding' can be used to ensure short captions don't look awkward in wide containers.
 
 ### Aligning Text Blocks
 For certain stylistic layouts, ensuring paragraphs or short text blocks align perfectly to the container's left and right edges by subtly adjusting spacing or size can be achieved declaratively with these properties, rather than relying on justified text which can sometimes lead to excessive gaps.
