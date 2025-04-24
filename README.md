@@ -53,14 +53,59 @@ Publishing (news sites, blogs, magazines, portfolios) heavily relies on flexible
 
 A short headline for a prominent article might look lost in a wide column on a desktop, text-grow could automatically increase its size or character/word spacing to fill the available width, creating a stronger visual impact without manual tweaking or JS calculations based on breakpoints.
 
+* Original:<br>
+  `<div>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et  ...`<br>
+  <img src="images/expanding-original.png" alt="o" width="267">
+* A) Enlarge each line to fit them to the container width:<br>
+  <img src="images/expanding-a.png" width="271">
+* B) Enlarge all lines to fit the widest line to the container width:<br>
+  <img src="images/expanding-b.png" width="272">
+
+
+
 
 ### Shrinking
 
 A long headline containing several words or a very long word might easily overflow its container on smaller screens or in constrained sidebar layouts. Text-shrink ensures the headline reduces its size or adjusts spacing to fit within the allocated width, preventing truncation or awkward line breaks without needing JS to measure and resize.
 
+* Original:<br>
+  `<div>Effective CSS architecture emphasizes componentization for easier ...`<br>
+  <img src="images/shrinking-original.png" width="194">
+* A) Making an overflowing line smaller to fit it to the container width:<br>
+  <img src="images/shrinking-a.png" width="176">
+* B) Making all lines smaller to fit the overflowing line to the container width:<br>
+  <img src="images/shrinking-b.png" width="180">
+
+
+
 
 ### Combining behaviors 
 Using both text-grow and text-shrink creates fluid headlines that always attempt to occupy 100% of their container width, adapting automatically whether the container gets wider or narrower. Creates responsive layouts where text scales naturally with the design.
+
+* Original:
+    ```html
+    <div style="white-space:pre; width:...px">WANTED
+    DEAD OR ALIVE
+    REWARD $1,234,567,890
+    </div>
+    ```
+  <img src="images/combine-original.png" width="279">
+
+* A) Making each line fit to the container width by adjusting font-size:<br>
+  <img src="images/combine-a.png" width="172">
+* B) Making each line fit to the container width by adjusting letter-spacing:<br>
+  <img src="images/combine-b.png" width="171">
+* C) Making each line fit to the container width by scaling horizontally:<br>
+  <img src="images/combine-c.png" width="169">
+* D) Make each line fit to the container width by justification and scaling horizontally.<br>
+  Original:<br>
+    ```html
+    <div style="text-wrap-mode:nowrap; width:...px">
+    石原裕次郎<br>
+    トム・クルーズ<br>
+    ...
+    ```
+  <img src="images/combine-d.png" width="426">
 
 
 ### Fitting Captions and Pull Quotes
@@ -101,9 +146,9 @@ We'd like to introduce two CSS properties.
 <fit-method> = scale | scale-inline | font-size | letter-spacing | ...
 ```
 - `scale`: Scale glyphs in the original font-size.
-- `scale-inline`: Scale glyphs in the original font-size only horizontally. It's similar to SVG [`lengthAdjust=spacingAndGlyphs`](https://svgwg.org/svg2-draft/text.html#TextElementLengthAdjustAttribute).  This method doesn't change line height.  See Use case 3C.
+- `scale-inline`: Scale glyphs in the original font-size only horizontally. It's similar to SVG [`lengthAdjust=spacingAndGlyphs`](https://svgwg.org/svg2-draft/text.html#TextElementLengthAdjustAttribute).  This method doesn't change line height.
 - `font-size`: Update the font-size and re-compute glyphs.
-- `letter-spacing`: Adjust line width by letter-spacing.  It's similar to SVG [`lengthAdjust=spacing`](https://svgwg.org/svg2-draft/text.html#TextElementLengthAdjustAttribute).  This method doesn't change line height. See Use case 3B.
+- `letter-spacing`: Adjust line width by letter-spacing.  It's similar to SVG [`lengthAdjust=spacing`](https://svgwg.org/svg2-draft/text.html#TextElementLengthAdjustAttribute).  This method doesn't change line height.
 
 
 ```<length>```: maximum font-size for `text-grow`, minimum font-size for `text-shrink`.
@@ -116,7 +161,8 @@ We'd like to introduce two CSS properties.
 ```css
 text-grow: per-line;
 ```
-<!--See "Use cases" "Expanding" A--> If a line width is narrower than the container width, line's font-size is increased so that the line width matches the container width. Even if a single font-size is used in the container, each line might have different font-sizes.
+See [Use cases Expanding](#expanding) A.
+If a line width is narrower than the container width, line's font-size is increased so that the line width matches the container width. Even if a single font-size is used in the container, each line might have different font-sizes.
 If a line width is wider than the container width, the line is unchanged.
 
 ```css
@@ -127,7 +173,8 @@ Ditto.  However the increased font-size is capped to 30px.  So, lines might be n
 ```css
 text-grow: consistent;
 ```
-<!--See "Use cases" "Expanding" B--> Compute a scaling factor so that the widest line in the container fits to the container width, and scale all lines in the container by the scaling factor.
+See [Use cases Expanding](#expanding) B.
+Compute a scaling factor so that the widest line in the container fits to the container width, and scale all lines in the container by the scaling factor.
 If the widest line is wider than the container width, nothing happens.
 
 #### Shrinking
@@ -135,7 +182,8 @@ If the widest line is wider than the container width, nothing happens.
 ```css
 text-shrink: per-line;
 ```
-<!--See "Use cases" "Shrinking" A--> If a line width is wider than the container width, line's font-size is decreased so that the line width matches the container width. Even if a single font-size is used in the container, each line might have different font-sizes.
+See [Use cases Shrinking](#shrinking) A.
+If a line width is wider than the container width, line's font-size is decreased so that the line width matches the container width. Even if a single font-size is used in the container, each line might have different font-sizes.
 If a line width is narrower than the container width, the line is unchanged.
 
 ```css
@@ -146,7 +194,8 @@ Ditto. However the decreased font-size must not be less than 8px.  So lines migh
 ```css
 text-shrink: consistent;
 ```
-<!--See "Use cases" "Shrinking" B--> Compute a scaling factor so that the widest line in the container fits to the container width, and scale all lines in the container by the scaling factor.
+See [Use cases Shrinking](#shrinking B).
+Compute a scaling factor so that the widest line in the container fits to the container width, and scale all lines in the container by the scaling factor.
 If the widest line is narrower than the container width, nothing happens.
 
 #### Combining behaviors
@@ -155,19 +204,22 @@ If the widest line is narrower than the container width, nothing happens.
 text-grow: per-line;
 text-shrink: per-line;
 ```
-<!--See "Use cases" "Combining behaviors" A--> If a line width is narrower than the container width, line's font-size is increased so that the line width matches the container width.  If a line width is wider than the container width, line's font-size is decreased so that the line width matches the container width.
+See [Use cases Combining](#combining-behaviors-1) A.
+If a line width is narrower than the container width, line's font-size is increased so that the line width matches the container width.  If a line width is wider than the container width, line's font-size is decreased so that the line width matches the container width.
 
 ```css
 text-grow: per-line letter-spacing;
 text-shrink: per-line letter-spacing;
 ```
-<!--See "Use cases" "Combining behaviors" B--> If a line width is narrower than the container width, line's letter-spacing is increased so that the line width matches the container width.  If a line width is wider than the container width, line's letter-spacing is decreased so that the line width matches the container width.
+See [Use cases Combining](#combining-behaviors-1) B.
+If a line width is narrower than the container width, line's letter-spacing is increased so that the line width matches the container width.  If a line width is wider than the container width, line's letter-spacing is decreased so that the line width matches the container width.
 
 ```css
 text-grow: per-line scale-inline;
 text-shrink: per-line scale-inline;
 ```
-<!--See "Use cases" "Combining behaviors" C--> If a line width is narrower or wider than the container width, line's text is scaled horizontally so that the line width matches the container width.
+See [Use cases Combining](#combining-behaviors-1) C.
+If a line width is narrower or wider than the container width, line's text is scaled horizontally so that the line width matches the container width.
 
 ```css
 text-grow: consistent;
@@ -179,7 +231,8 @@ Compute a scaling factor so that the widest line in the container fits to the co
 text-shrink: per-line scale-inline;
 text-align: justify;
 ```
-<!--See "Use cases" "Combining behaviors" D--> Lines narrower than the container width are justified, and lines wider than the container width are scaled horizontally.
+See [Use cases Combining](#combining-behaviors-1) D.
+Lines narrower than the container width are justified, and lines wider than the container width are scaled horizontally.
 
 
 ## Detailed design discussion
