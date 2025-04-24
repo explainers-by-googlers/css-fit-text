@@ -12,6 +12,27 @@ feedback on the proposed solution. It has not been approved to ship in Chrome.
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
+- [Introduction](#introduction)
+  - [Why CSS?](#why-css)
+    - [Performance](#performance)
+    - [Improved User Experience](#improved-user-experience)
+    - [Simplified Authoring & Maintainability](#simplified-authoring--maintainability)
+- [Goals](#goals)
+- [Non-goals](#non-goals)
+- [Use cases](#use-cases)
+  - [Expanding](#expanding)
+  - [Shrinking](#shrinking)
+  - [Combining behaviors](#combining-behaviors)
+  - [Fitting Captions and Pull Quotes](#fitting-captions-and-pull-quotes)
+  - [Aligning Text Blocks](#aligning-text-blocks)
+- [[Potential Solution]](#potential-solution)
+  - [Exmaples](#exmaples)
+    - [Expanding](#expanding-1)
+    - [Shrinking](#shrinking-1)
+    - [Combining behaviors](#combining-behaviors-1)
+- [Detailed design discussion](#detailed-design-discussion)
+- [Considered alternatives](#considered-alternatives)
+- [References & acknowledgements](#references--acknowledgements)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
