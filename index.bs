@@ -3,9 +3,9 @@ Title: The TODO API
 Shortname: todo
 Level: None
 Status: w3c/UD
-Repository: explainers-by-googlers/todo-your-repo-name
-URL: https://explainers-by-googlers.github.io/todo-your-repo-name
-Editor: TODO: Your Name, Google https://google.com, TODO@google.com
+Repository: explainers-by-googlers/css-fit-text
+URL: https://explainers-by-googlers.github.io/css-fit-text
+Editor: TODO: Your Name, Google https://google.com, tkent@google.com
 Abstract: TODO: A short description of your spec, one or two sentences.
 Markup Shorthands: markdown yes, css no
 Complain About: accidental-2119 yes, missing-example-ids yes
@@ -20,7 +20,7 @@ Include Can I Use Panels: yes
 Introduction {#intro}
 =====================
 
-For now, see the [explainer]([REPOSITORYURL]).
+For now, see the [explainer]([https://github.com/explainers-by-googlers/css-fit-text/]).
 
 See [https://garykac.github.io/procspec/](https://garykac.github.io/procspec/),
 [https://dlaliberte.github.io/bikeshed-intro/index.html](https://dlaliberte.github.io/bikeshed-intro/index.html),
