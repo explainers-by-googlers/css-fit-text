@@ -42,7 +42,7 @@ Achieving robust text fitting in JavaScript is complex. It requires handling ini
 ## Non-goals
 
 - Provide a way to adjust the container width to match to the widest line.
-- Provide a way to adjust font size to fit text to the container's width and height.
+- Provide a way to adjust font size to fit text to the container's **width and height**.
 - Introduce a new line-wrapping algorithm to fit lines to the container width.
 
 ## Use cases
@@ -119,7 +119,7 @@ For certain stylistic layouts, ensuring paragraphs or short text blocks align pe
 We'd like to introduce two CSS properties.
 
 - Name:
-  'text-grow'
+  '**`text-grow`**'
 - Value:
   `<fit-target> <fit-method>? <length>?`
 - Initial:
@@ -128,7 +128,7 @@ We'd like to introduce two CSS properties.
   text containers
 
 * Name:
-  'text-shrink'
+  '**`text-shrink`**'
 * Value:
   `<fit-target> <fit-method>? <length>?`
 * Initial:
@@ -237,9 +237,41 @@ Lines narrower than the container width are justified, and lines wider than the 
 
 ## Detailed design discussion
 
+* Items contained in a line box are classified as either "scalable" or "static", and only "scalable" items are affected by this feature.
+  * Texts are scalable.
+    * Should we assume text with a fixed font-size as "static"?  e.g. `<div style="text-grow:per-line; font-size:24px">scalable <span style="font-size:1.1em">font-relative font-size should be scalable</span> <span style="font-size:30px">non-relative font-size; static-or-scalable?</span>...`
+  * Replaced elements such as <img> and <input> are static.
+  * Atomic inlines are static
+  * What about padding/border/margin of inline boxes?
+* How does this interact with properties with `<length>`.
+  * Should the length be scaled or not?  Depends on its units (`px`, `em`, `rem`, `%`, `vw`, `vh`, etc.)?
+  * Property examples: `line-height`, `letter-spacing`, `word-spacing`, `text-indent`, `vertical-align`, ...
+* The methods vaues `scale` and `font-size` that can be specified for `<fit-method>` can produce similar visual results. Through prototype implementation and discussion, we aim to decide whether to standardize both or remove one of them.
+  * `scale` linearly scales up the glyph data obtained at the original font size for rendering. Consequently, the displayed glyph might differ from the ideal glyph intended for that size. However, since the glyph data retrieval process only happens once, it operates significantly faster.
+  * `font-size` renders the ideal glyph for the displayed size. This process can be considerably slower because it necessitates trying out glyphs of various sizes.
+* How to find the best-fit font-size?
+  There are cases where the line width becomes smaller even if the font-size is increased.
+* `font-weight` or `font-width` for `<fit-method>`?
+  They work well only with specific fonts, and they don't offer the flexibility to fit text to any width.  So we don't apply them in the initial proposal.
+* Accessibility
+  If an end-user tries to enlarge font size, UAs should not fit enlarged lines to the container width. Is minimum-font setting enough?
+* The user's minimum font size preference should be respected.
+* How to handle last lines if `text-grow:per-line` is specified. Should we widen them even if auto-wrapped?
+* Text decoration, emphasis marks, ruby annotations should work well.
+* Line's available width can depend on its block offset. e.g. `float` and `initial-letter`.
+* `text-align` should be applied after this feature.  It will be applied only to narrow lines.
+* This feature should not affect the container's intrinsic size.
+
+
 
 ## Considered alternatives
 
+* Implement this behavior as a value of font-size property, like `font-size:fit-width`.
+  It's technically difficult because the container width might depend on the font-size.
+
 
 ## References & acknowledgements
+
+* [[css-fonts-5] Feature for making text always fit the width of its parent](https://github.com/w3c/csswg-drafts/issues/2528)
+* [Roman's presentation at CSSWG meeting](https://drive.google.com/drive/folders/1og8QAU1m0QSaqxNGX6rSYUvQhfTy3PIq?usp=sharing)
 
