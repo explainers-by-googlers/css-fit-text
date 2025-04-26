@@ -26,7 +26,7 @@ feedback on the proposed solution. It has not been approved to ship in Chrome.
   - [Fitting Captions and Pull Quotes](#fitting-captions-and-pull-quotes)
   - [Aligning Text Blocks](#aligning-text-blocks)
 - [[Potential Solution]](#potential-solution)
-  - [Exmaples](#exmaples)
+  - [Examples](#examples)
     - [Expanding](#expanding-1)
     - [Shrinking](#shrinking-1)
     - [Combining behaviors](#combining-behaviors-1)
@@ -175,7 +175,7 @@ We'd like to introduce two CSS properties.
 ```<length>```: maximum font-size for `text-grow`, minimum font-size for `text-shrink`.
 
 
-### Exmaples
+### Examples
 
 #### Expanding
 
@@ -215,7 +215,7 @@ Ditto. However the decreased font-size must not be less than 8px.  So lines migh
 ```css
 text-shrink: consistent;
 ```
-See [Use cases Shrinking](#shrinking B).
+See [Use cases Shrinking](#shrinking) B.
 Compute a scaling factor so that the widest line in the container fits to the container width, and scale all lines in the container by the scaling factor.
 If the widest line is narrower than the container width, nothing happens.
 
@@ -261,7 +261,7 @@ Lines narrower than the container width are justified, and lines wider than the 
 * Items contained in a line box are classified as either "scalable" or "static", and only "scalable" items are affected by this feature.
   * Texts are scalable.
     * Should we assume text with a fixed font-size as "static"?  e.g. `<div style="text-grow:per-line; font-size:24px">scalable <span style="font-size:1.1em">font-relative font-size should be scalable</span> <span style="font-size:30px">non-relative font-size; static-or-scalable?</span>...`
-  * Replaced elements such as <img> and <input> are static.
+  * Replaced elements such as `<img>` and `<input>` are static.
   * Atomic inlines are static
   * What about padding/border/margin of inline boxes?
 * How does this interact with properties with `<length>`.
