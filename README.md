@@ -98,7 +98,8 @@ A long headline containing several words or a very long word might easily overfl
   <img src="images/shrinking-b.png" width="180">
 
 
-
+<!-- Remove "Combining behaivor" section.
+  We don't support it in the initial version.
 
 ### Combining behaviors 
 Using both expanding and shrinking creates fluid headlines that always attempt to occupy 100% of their container width, adapting automatically whether the container gets wider or narrower. Creates responsive layouts where text scales naturally with the design.
@@ -127,7 +128,7 @@ Using both expanding and shrinking creates fluid headlines that always attempt t
     ...
     ```
   <img src="images/combine-d.png" width="426">
-
+-->
 
 ### Fitting Captions and Pull Quotes
 Text accompanying images or used as pull quotes often needs to precisely fit the width of the related content block. 'Shrinking' can prevent overflow, while 'Expanding' can be used to ensure short captions don't look awkward in wide containers.
@@ -137,32 +138,32 @@ For certain stylistic layouts, ensuring paragraphs or short text blocks align pe
 
 ## [Potential Solution]
 
-We'd like to introduce two CSS properties.
+We'd like to introduce a new CSS property.
 
 - Name:
-  '**`text-grow`**'
+  '**`text-fit`**'
 - Value:
-  `<fit-target> <fit-method>? <length>?`
+  `<fit-type> <fit-target>? <scale-limit>?`
 - Initial:
   none
 - Applies to:
   text containers
 
-* Name:
-  '**`text-shrink`**'
-* Value:
-  `<fit-target> <fit-method>? <length>?`
-* Initial:
-  none
-* Applies to:
-  text containers
+```
+<fit-type> = none | grow | shrink
+```
+- `grow`: Allow lines to fit the target container width by enlarging text.
+- `shrink`: Allow lines to fit the target container width by shrinking text.
+
 
 ```
-<fit-target> = none | consistent | per-line
+<fit-target> = consistent | per-line | per-line-all
 ```
-- `per-line`: Makes each line in the target container larger/smaller independently
 - `consistent`: Makes all lines in the target container larger/smaller by a scaling factor for the widest line.
+- `per-line`: Makes each line in the target container larger/smaller independently, except for the last line.
+- `per-line-all`: Make each line in the target container larger/smaller independently, including the last line.
 
+<!--
 ```
 <fit-method> = scale | scale-inline | font-size | letter-spacing | ...
 ```
@@ -170,9 +171,12 @@ We'd like to introduce two CSS properties.
 - `scale-inline`: Scale glyphs in the original font-size only horizontally. It's similar to SVG [`lengthAdjust=spacingAndGlyphs`](https://svgwg.org/svg2-draft/text.html#TextElementLengthAdjustAttribute).  This method doesn't change line height.
 - `font-size`: Update the font-size and re-compute glyphs.
 - `letter-spacing`: Adjust line width by letter-spacing.  It's similar to SVG [`lengthAdjust=spacing`](https://svgwg.org/svg2-draft/text.html#TextElementLengthAdjustAttribute).  This method doesn't change line height.
+-->
 
-
-```<length>```: maximum font-size for `text-grow`, minimum font-size for `text-shrink`.
+```
+<scale-limit> = <percentage>
+```
+The maximum scaling factor for `grow`, or the minimum scaling factor for `shrink`.
 
 
 ### Examples
@@ -180,19 +184,19 @@ We'd like to introduce two CSS properties.
 #### Expanding
 
 ```css
-text-grow: per-line;
+text-fit: grow per-line-all;
 ```
 See [Use cases Expanding](#expanding) A.
 If a line width is narrower than the container width, line's font-size is increased so that the line width matches the container width. Even if a single font-size is used in the container, each line might have different font-sizes.
 If a line width is wider than the container width, the line is unchanged.
 
 ```css
-text-grow: per-line 30px;
+text-fit: grow per-line-all 200%;
 ```
-Ditto.  However the increased font-size is capped to 30px.  So, lines might be narrower than the container width.
+Ditto.  However the text will expand up to twice the original size.  So, lines might be narrower than the container width.
 
 ```css
-text-grow: consistent;
+text-fit: grow consistent;
 ```
 See [Use cases Expanding](#expanding) B.
 Compute a scaling factor so that the widest line in the container fits to the container width, and scale all lines in the container by the scaling factor.
@@ -201,24 +205,25 @@ If the widest line is wider than the container width, nothing happens.
 #### Shrinking
 
 ```css
-text-shrink: per-line;
+text-fit: shrink per-line-all;
 ```
 See [Use cases Shrinking](#shrinking) A.
 If a line width is wider than the container width, line's font-size is decreased so that the line width matches the container width. Even if a single font-size is used in the container, each line might have different font-sizes.
 If a line width is narrower than the container width, the line is unchanged.
 
 ```css
-text-shrink: per-line 8px;
+text-fit: shrink per-line-all 50%;
 ```
-Ditto. However the decreased font-size must not be less than 8px.  So lines might be wider than the container width.
+Ditto. However the text will shrink down to half the original size.  So lines might be wider than the container width.
 
 ```css
-text-shrink: consistent;
+text-fit: shrink consistent;
 ```
 See [Use cases Shrinking](#shrinking) B.
 Compute a scaling factor so that the widest line in the container fits to the container width, and scale all lines in the container by the scaling factor.
 If the widest line is narrower than the container width, nothing happens.
 
+<!--
 #### Combining behaviors
 
 ```css
@@ -254,7 +259,7 @@ text-align: justify;
 ```
 See [Use cases Combining](#combining-behaviors-1) D.
 Lines narrower than the container width are justified, and lines wider than the container width are scaled horizontally.
-
+-->
 
 ## Detailed design discussion
 
@@ -267,17 +272,18 @@ Lines narrower than the container width are justified, and lines wider than the 
 * How does this interact with properties with `<length>`.
   * Should the length be scaled or not?  Depends on its units (`px`, `em`, `rem`, `%`, `vw`, `vh`, etc.)?
   * Property examples: `line-height`, `letter-spacing`, `word-spacing`, `text-indent`, `vertical-align`, ...
+<!--
 * The methods vaues `scale` and `font-size` that can be specified for `<fit-method>` can produce similar visual results. Through prototype implementation and discussion, we aim to decide whether to standardize both or remove one of them.
   * `scale` linearly scales up the glyph data obtained at the original font size for rendering. Consequently, the displayed glyph might differ from the ideal glyph intended for that size. However, since the glyph data retrieval process only happens once, it operates significantly faster.
   * `font-size` renders the ideal glyph for the displayed size. This process can be considerably slower because it necessitates trying out glyphs of various sizes.
+-->
 * How to find the best-fit font-size?
   There are cases where the line width becomes smaller even if the font-size is increased.
+<!--
 * `font-weight` or `font-width` for `<fit-method>`?
   They work well only with specific fonts, and they don't offer the flexibility to fit text to any width.  So we don't apply them in the initial proposal.
-* Accessibility
-  If an end-user tries to enlarge font size, UAs should not fit enlarged lines to the container width. Is minimum-font setting enough?
-* The user's minimum font size preference should be respected.
-* How to handle last lines if `text-grow:per-line` is specified. Should we widen them even if auto-wrapped?
+-->
+* Accessibility:  See https://github.com/w3c/csswg-drafts/issues/12886.
 * Text decoration, emphasis marks, ruby annotations should work well.
 * Line's available width can depend on its block offset. e.g. `float` and `initial-letter`.
 * `text-align` should be applied after this feature.  It will be applied only to narrow lines.
