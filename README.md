@@ -178,6 +178,7 @@ We'd like to introduce a new CSS property.
 ```
 The maximum scaling factor for `grow`, or the minimum scaling factor for `shrink`.
 
+See https://github.com/w3c/csswg-drafts/issues/12887.
 
 ### Examples
 
@@ -264,29 +265,31 @@ Lines narrower than the container width are justified, and lines wider than the 
 ## Detailed design discussion
 
 * Items contained in a line box are classified as either "scalable" or "static", and only "scalable" items are affected by this feature.
-  * Texts are scalable.
-    * Should we assume text with a fixed font-size as "static"?  e.g. `<div style="text-grow:per-line; font-size:24px">scalable <span style="font-size:1.1em">font-relative font-size should be scalable</span> <span style="font-size:30px">non-relative font-size; static-or-scalable?</span>...`
+  * See https://github.com/w3c/csswg-drafts/issues/12888.
+  * All texts are scalable even if a text has a font-size diffrent from the container font-size.
+  * %-based `letter-spacing` and `word-spacing` are scalable.
   * Replaced elements such as `<img>` and `<input>` are static.
   * Atomic inlines are static
-  * What about padding/border/margin of inline boxes?
+  * `padding`, `border`, and `margin` for inline direction are static.
+  * This classification may be configurable in the future.
 * How does this interact with properties with `<length>`.
-  * Should the length be scaled or not?  Depends on its units (`px`, `em`, `rem`, `%`, `vw`, `vh`, etc.)?
-  * Property examples: `line-height`, `letter-spacing`, `word-spacing`, `text-indent`, `vertical-align`, ...
+  * Should the `<length>` be scaled or not? See https://github.com/w3c/csswg-drafts/issues/12888.
+  * In general, `<length>` values are not scaled. `4px` should be `4px` even if a line is scaled.
+    Font-relative length units such as `em` are not scalable too. Exceptionally, the percentage
+    values ​​of some CSS properties should be linked to the rendered font size, so they are scalable.
 <!--
 * The methods vaues `scale` and `font-size` that can be specified for `<fit-method>` can produce similar visual results. Through prototype implementation and discussion, we aim to decide whether to standardize both or remove one of them.
   * `scale` linearly scales up the glyph data obtained at the original font size for rendering. Consequently, the displayed glyph might differ from the ideal glyph intended for that size. However, since the glyph data retrieval process only happens once, it operates significantly faster.
   * `font-size` renders the ideal glyph for the displayed size. This process can be considerably slower because it necessitates trying out glyphs of various sizes.
 -->
+<!--
 * How to find the best-fit font-size?
   There are cases where the line width becomes smaller even if the font-size is increased.
-<!--
 * `font-weight` or `font-width` for `<fit-method>`?
   They work well only with specific fonts, and they don't offer the flexibility to fit text to any width.  So we don't apply them in the initial proposal.
 -->
 * Accessibility:  See https://github.com/w3c/csswg-drafts/issues/12886.
-* Text decoration, emphasis marks, ruby annotations should work well.
-* Line's available width can depend on its block offset. e.g. `float` and `initial-letter`.
-* `text-align` should be applied after this feature.  It will be applied only to narrow lines.
+* Text decoration, emphasis marks, ruby annotations should work well with scaled font-size.
 * This feature should not affect the container's intrinsic size.
 
 
